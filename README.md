@@ -4,6 +4,17 @@
 
 - [用語集](glossary.md)
 
+## 詳しいメモ
+
+| フォルダ | 内容 |
+|---|---|
+| [virtualization/](virtualization/) | 仮想化・OS |
+| [linux/](linux/) | Linux の操作 |
+| [network/](network/) | ネットワーク |
+| [ssh/](ssh/) | ssh |
+| [web/](web/) | Web |
+| [security/](security/) | 公開・セキュリティ |
+
 ## 今の構成
 
 ```
