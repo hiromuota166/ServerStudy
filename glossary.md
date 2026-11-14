@@ -104,8 +104,9 @@
 
 | 用語 | 意味 |
 |---|---|
-| VPN | 離れた場所の機器同士を、安全なトンネルでつなぐ仕組み |
-| Tailscale | 自分の機器だけをつなぐ VPN サービス。どこからでも自分だけがアクセスできる |
+| VPN | インターネットの上に作る、自分たち専用の暗号化トンネル。離れた機器同士が同じ Wi-Fi にいるように通信できる。会社の VPN も同じ仕組み → [詳しく](security/vpn.md) |
+| Tailscale | 自分の機器だけをつなぐ VPN サービス。機器同士が直接つながる（メッシュ型）。NAT の奥でもポートフォワーディングなしで届く → [詳しく](security/vpn.md) |
+| Tailscale IP（100.x.x.x） | Tailscale のトンネルの中だけで使える住所。トンネルに入っていない他人からは届かない |
 | Cloudflare Tunnel | ルーターのポートを開けずに、サーバーをインターネットに公開できる仕組み |
 | DDNS | 自宅のグローバル IP が変わっても、ドメイン名と自動で結びつけ直してくれる仕組み |
 | リバースプロキシ | 外からのリクエストを受け付けて、裏のアプリに渡す窓口役。HTTPS の処理もここで行う |
@@ -129,3 +130,5 @@
 | `sudo reboot` | 再起動 |
 | `sudo shutdown now` | シャットダウン |
 | `netsh interface portproxy show all` | ポートフォワーディングの設定を確認する（Windows） |
+| `sudo tailscale up` | Tailscale に接続する（初回は表示された URL でログイン） |
+| `tailscale ip -4` | Tailscale 用の IP（`100.x.x.x`）を確認する |

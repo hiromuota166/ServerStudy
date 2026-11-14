@@ -22,6 +22,8 @@ iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
                     │ ポートフォワーディング
                     │ NATSwitch（192.168.100.0/24）
                     └ Ubuntu Server 26.04.1 LTS（192.168.100.10）── nginx（80）
+
+iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.x.x.x）
 ```
 
 ## ロードマップ
@@ -31,7 +33,7 @@ iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
 - [x] nginx で Web ページを表示する
 - [x] ポートフォワーディングで iPhone から見る
 - [x] 内部仮想スイッチを作って IP を固定する
-- [ ] Tailscale で、自分だけどこからでも入れるようにする
+- [x] Tailscale で、自分だけどこからでも入れるようにする
 - [ ] ssh の強化とファイアウォール
 - [ ] 自作の Web アプリ（API）を作って、nginx の裏で動かす
 - [ ] ドメイン + Cloudflare Tunnel で HTTPS 公開する
