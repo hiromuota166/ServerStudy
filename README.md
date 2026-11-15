@@ -39,8 +39,9 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 | インターネット | どこにも | - | - | 入口なし |
 
 - 「HTTP」は、ブラウザでも `curl` でも iOS の `URLSession` でも同じ。扉から見ると区別はない
-- ⚠️ 今は ufw を入れていないので、Ubuntu の扉は全部開いている（表と実際がズレている）。ufw でデフォルト拒否にして、表と一致させる
-- 確認方法：中からは `sudo ss -tlnp`、外からは Mac で `nc -vz IP ポート`
+- ✅ ufw でデフォルト拒否にして、この表の通り道だけを許可している（→ [ファイアウォール（ufw）](security/firewall.md)）
+- ✅ ssh は鍵でしか入れない（→ [ssh の強化](ssh/hardening.md)）
+- 確認方法：設定は `sudo ufw status verbose`、中で開いているポートは `sudo ss -tlnp`、外からは `curl.exe --max-time 5` や Mac の `nc -vz IP ポート`
 
 ## ロードマップ
 
@@ -50,7 +51,7 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 - [x] ポートフォワーディングで iPhone から見る
 - [x] 内部仮想スイッチを作って IP を固定する
 - [x] Tailscale で、自分だけどこからでも入れるようにする
-- [ ] ssh の強化とファイアウォール
+- [x] ssh の強化とファイアウォール
 - [ ] 自作の Web アプリ（API）を作って、nginx の裏で動かす
 - [ ] ドメイン + Cloudflare Tunnel で HTTPS 公開する
 - [ ] 運用保守（自動アップデート、ログ、バックアップ、デプロイ手順）

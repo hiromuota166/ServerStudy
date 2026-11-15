@@ -7,3 +7,4 @@ Tailscale、Cloudflare Tunnel、ファイアウォール、証明書などの詳
 ## メモ一覧
 
 - [VPN と Tailscale](vpn.md)
+- [ファイアウォール（ufw）](firewall.md)
