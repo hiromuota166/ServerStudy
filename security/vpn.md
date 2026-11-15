@@ -47,8 +47,10 @@ Tailscale は「管理用の入口」として使う（踏み台サーバーと�
   ```
   表示された URL を Windows のブラウザで開いてログインする
 - iPhone は App Store の「Tailscale」アプリで、同じアカウントにログインする
-- `tailscale ip -4` で Tailscale 用の IP（`100.x.x.x`）を確認する
-- iPhone の Wi-Fi をオフにして（モバイル回線で）`http://100.x.x.x` を開き、nginx のページが見えた
+- `tailscale ip -4` で Tailscale 用の IP を確認する → `100.114.194.19`
+- iPhone の Wi-Fi をオフにして（モバイル回線で）`http://100.114.194.19` を開き、nginx のページが見えた
+- この IP は再起動しても、iPhone がどこにいても変わらない。変わるのは、管理画面で機器を削除したときや、入れ直して別の機器として登録し直したときだけ
+- MagicDNS が有効なら、IP の代わりに `http://hiromuserver` でも開ける（Windows で使うには、Windows にも Tailscale を入れる）
 
 ## 関連する用語
 - [用語集](../glossary.md#公開セキュリティ)

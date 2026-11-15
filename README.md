@@ -23,7 +23,7 @@ iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
                     │ NATSwitch（192.168.100.0/24）
                     └ Ubuntu Server 26.04.1 LTS（192.168.100.10）── nginx（80）
 
-iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.x.x.x）
+iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 ```
 
 ## ロードマップ
