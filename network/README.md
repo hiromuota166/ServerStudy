@@ -7,3 +7,4 @@ IP アドレス、DHCP、NAT、仮想スイッチ、ポートフォワーディ�
 ## メモ一覧
 
 - [DNS](dns.md)
+- [NAT](nat.md)
