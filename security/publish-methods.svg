@@ -1,0 +1,62 @@
+<svg viewBox="0 0 680 640" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#666"/></marker></defs>
+<style>
+.box{fill:#f4f4f2;stroke:#bbb;stroke-width:1.5}
+.hot{fill:#faeeda;stroke:#ba7517;stroke-width:1.5}
+.ok{fill:#eaf3de;stroke:#639922;stroke-width:1.5}
+.h{fill:#222;font-size:16px;font-weight:700}
+.t{fill:#222;font-size:14px;font-weight:600}
+.s{fill:#555;font-size:12px}
+.ln{stroke:#666;stroke-width:1.5;fill:none}
+.tn{stroke:#639922;stroke-width:2.5;fill:none;stroke-dasharray:6 4}
+</style>
+<rect width="680" height="640" fill="#ffffff"/>
+<text x="170" y="26" class="h" text-anchor="middle">A. ポート開放で公開</text>
+<text x="510" y="26" class="h" text-anchor="middle">B. Cloudflare Tunnel（Lv2 の予定）</text>
+
+<rect x="20" y="44" width="300" height="56" rx="8" class="box"/>
+<text x="36" y="68" class="t">ブラウザ</text><text x="36" y="88" class="s">https://hiromu.dev → 443 番</text>
+<line x1="170" y1="100" x2="170" y2="122" class="ln" marker-end="url(#a)"/>
+<rect x="20" y="124" width="300" height="56" rx="8" class="box"/>
+<text x="36" y="148" class="t">DNS</text><text x="36" y="168" class="s">hiromu.dev → 自宅のグローバル IP</text>
+<line x1="170" y1="180" x2="170" y2="202" class="ln" marker-end="url(#a)"/>
+<rect x="20" y="204" width="300" height="56" rx="8" class="hot"/>
+<text x="36" y="228" class="t">自宅のルーター</text><text x="36" y="248" class="s">設定①：443 番 → Windows</text>
+<line x1="170" y1="260" x2="170" y2="282" class="ln" marker-end="url(#a)"/>
+<rect x="20" y="284" width="300" height="56" rx="8" class="hot"/>
+<text x="36" y="308" class="t">Windows</text><text x="36" y="328" class="s">設定②：443 番 → Ubuntu（portproxy）</text>
+<line x1="170" y1="340" x2="170" y2="362" class="ln" marker-end="url(#a)"/>
+<rect x="20" y="364" width="300" height="56" rx="8" class="box"/>
+<text x="36" y="388" class="t">Ubuntu</text><text x="36" y="408" class="s">設定③：ufw で 443 を許可 → nginx</text>
+<rect x="20" y="450" width="300" height="160" rx="8" class="hot"/>
+<text x="36" y="476" class="t">⚠️ 気になるところ</text>
+<text x="36" y="500" class="s">・扉が世界中に開きっぱなし</text>
+<text x="36" y="522" class="s">・自宅の IP が世界に知られる</text>
+<text x="36" y="544" class="s">・グローバル IP が変わると届かない</text>
+<text x="52" y="562" class="s">（→ DDNS が必要）</text>
+<text x="36" y="584" class="s">・二重 NAT なので扉を2回開ける</text>
+
+<rect x="360" y="44" width="300" height="56" rx="8" class="box"/>
+<text x="376" y="68" class="t">ブラウザ</text><text x="376" y="88" class="s">https://hiromu.dev → 443 番</text>
+<line x1="510" y1="100" x2="510" y2="122" class="ln" marker-end="url(#a)"/>
+<rect x="360" y="124" width="300" height="56" rx="8" class="box"/>
+<text x="376" y="148" class="t">DNS</text><text x="376" y="168" class="s">hiromu.dev → Cloudflare の IP</text>
+<line x1="510" y1="180" x2="510" y2="202" class="ln" marker-end="url(#a)"/>
+<rect x="360" y="204" width="300" height="56" rx="8" class="box"/>
+<text x="376" y="228" class="t">Cloudflare</text><text x="376" y="248" class="s">HTTPS を受けて、トンネルに流す</text>
+<line x1="510" y1="260" x2="510" y2="362" class="tn" marker-end="url(#a)"/>
+<text x="524" y="292" class="s">トンネル</text>
+<text x="524" y="312" class="s">（Ubuntu から先に</text>
+<text x="524" y="330" class="s">　外へつないでおく）</text>
+<text x="376" y="292" class="s">ルーター・Windows</text>
+<text x="376" y="310" class="s">の扉は閉じたまま</text>
+<rect x="360" y="364" width="300" height="56" rx="8" class="box"/>
+<text x="376" y="388" class="t">Ubuntu</text><text x="376" y="408" class="s">cloudflared → nginx（lo で渡す）</text>
+<rect x="360" y="450" width="300" height="160" rx="8" class="ok"/>
+<text x="376" y="476" class="t">✅ いいところ</text>
+<text x="376" y="500" class="s">・扉を1つも開けなくていい</text>
+<text x="376" y="522" class="s">・自宅の IP は見えない</text>
+<text x="376" y="544" class="s">・IP が変わっても関係ない</text>
+<text x="376" y="566" class="s">・HTTPS の証明書も Cloudflare が用意</text>
+<text x="376" y="588" class="s">・仕組みは Tailscale と同じ</text>
+</svg>
