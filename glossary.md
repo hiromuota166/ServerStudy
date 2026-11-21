@@ -41,6 +41,10 @@
 | netplan | Ubuntu のネットワーク設定の仕組み。`/etc/netplan/*.yaml` に書く |
 | YAML | 設定ファイルの書き方。インデント（スペースの数）で階層を表す |
 | systemctl | サービス（常駐プログラム）の起動・停止・状態確認をするコマンド |
+| journalctl | サービスの日記（ログ）を見るコマンド。うまく動かないときに理由が書いてある |
+| Debian 系 / Red Hat 系 | Linux の2大家系。Debian 系（Debian、Ubuntu）は `apt` と `.deb`、Red Hat 系（RHEL、Fedora、Rocky）は `dnf` と `.rpm`。Ubuntu には Debian 用のソフトがそのまま入る |
+| gpg 鍵（署名の鍵） | apt で入れるソフトが本物の配布元のものかを確かめるための鍵。HTTPS の証明書と似た考え方 |
+| x86_64 / arm64 | CPU の種類。`uname -m` で確認。今の Ubuntu は `x86_64`（64-bit） |
 
 ## ネットワーク
 
@@ -61,7 +65,9 @@
 | ゲートウェイ | 別のネットワーク（インターネットなど）へ出るときの出口。今回は Windows（`192.168.100.1`） |
 | DNS | `ubuntu.com` のような名前を IP アドレスに変換する仕組み。スマホの連絡先のようなもの → [詳しく](network/dns.md) |
 | DNS サーバー | 名前を調べるときに問い合わせる相手。netplan の `nameservers` で指定した `1.1.1.1`（Cloudflare）、`8.8.8.8`（Google） |
-| ドメイン | `ubuntu.com` のような、インターネット上の名前。買って DNS に登録すると、自分のサーバーをその名前で公開できる |
+| ドメイン | `ubuntu.com` のような、インターネット上の名前。買って DNS に登録すると、自分のサーバーをその名前で公開できる。**右から読む**：持ち主は右端の `.com` とそのすぐ左で決まる。今は `hiromu-lab.dev` を持っている → [詳しく](security/cloudflare-tunnel-setup.md) |
+| サブドメイン | ドメインの頭に付ける名前（`test.hiromu-lab.dev` の `test.`）。持ち主が自由に、追加料金なしでいくつでも作れる。用途ごとに分ける |
+| TLD | ドメインの右端（`.com`、`.dev`、`.jp` など）。安い TLD（`.win`、`.xyz`）は詐欺に使われやすく評判が悪い |
 | MagicDNS | Tailscale のトンネルの中だけで使える DNS。`http://hiromuserver` のように名前で接続できる |
 | NAT | 内側の住所を外側の住所に書き換えて、通信を中継する仕組み。書き換えた記録（メモ帳）で返事を戻す。外から中へはそのままでは入れない → [詳しく](network/nat.md) |
 | 二重 NAT | NAT が2段になっていること。今回は Windows と自宅のルーターの2段 |
@@ -115,7 +121,12 @@
 | VPN | インターネットの上に作る、自分たち専用の暗号化トンネル。離れた機器同士が同じ Wi-Fi にいるように通信できる。会社の VPN も同じ仕組み → [詳しく](security/vpn.md) |
 | Tailscale | 自分の機器だけをつなぐ VPN サービス。機器同士が直接つながる（メッシュ型）。NAT の奥でもポートフォワーディングなしで届く → [詳しく](security/vpn.md) |
 | Tailscale IP（100.x.x.x） | Tailscale のトンネルの中だけで使える住所。トンネルに入っていない他人からは届かない。再起動しても変わらない。今の Ubuntu は `100.114.194.19` |
-| Cloudflare Tunnel | ルーターのポートを開けずに、サーバーをインターネットに公開できる仕組み。Ubuntu から先に Cloudflare へつないでおく → [詳しく](security/publish-methods.md) |
+| Cloudflare Tunnel | ルーターのポートを開けずに、サーバーをインターネットに公開できる仕組み。Ubuntu から先に Cloudflare へつないでおく → [仕組み](security/publish-methods.md)、[実際の手順](security/cloudflare-tunnel-setup.md) |
+| cloudflared | Cloudflare Tunnel をつなぐための、Ubuntu 側のソフト。サービスとして常駐し、再起動しても自動でつなぎ直す |
+| トンネルのトークン | cloudflared が「自分は hiromuserver だ」と名乗るための鍵（`eyJ...`）。漏れると偽サイトをつながれるので、人に見せない |
+| ルート（公開ホスト名） | 「このドメインに来たら、Ubuntu の中のどこに渡すか」の設定。今は `test.hiromu-lab.dev` → `http://localhost:80` |
+| 502 Bad Gateway | 受付（Cloudflare や nginx）は動いているが、奥に渡したら返事がおかしかった、というエラー。奥の区間を疑う |
+| オリジン | 受付の奥にある、本当の返事を作るサーバー。今回は Ubuntu の nginx |
 | DDNS | 自宅のグローバル IP が変わっても、ドメイン名と自動で結びつけ直してくれる仕組み |
 | リバースプロキシ | 外からのリクエストを受け付けて、裏のアプリに渡す窓口役。HTTPS の処理もここで行う |
 | 踏み台サーバー | 管理用の入口を1か所にまとめるためのサーバー。ここを経由しないと中に入れない |
@@ -145,4 +156,9 @@
 | `sudo ufw status verbose` | ファイアウォールの設定を確認する |
 | `sudo ss -tlnp` | 待ち受けているポートを確認する |
 | `sudo sshd -t` | ssh の設定ファイルに書き間違いがないか確認する |
+| `systemctl status cloudflared` | トンネルがつながっているか確認する（`active (running)` なら OK） |
+| `sudo journalctl -u cloudflared -n 20 --no-pager` | cloudflared のログを最新20行見る |
+| `uname -m` | CPU の種類（`x86_64` など）を確認する |
+| `nslookup ドメイン 1.1.1.1` | ドメインがどの IP になるか調べる（Windows） |
+| `curl.exe -sS -I https://ドメイン` | 返事のヘッダーだけ見る。`200 OK` / `502` などがわかる（Windows） |
 | `curl.exe ifconfig.me` | 外から見た自分のグローバル IP（ルーターの住所）を確認する（Windows） |

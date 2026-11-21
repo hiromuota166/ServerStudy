@@ -9,3 +9,4 @@ Tailscale、Cloudflare Tunnel、ファイアウォール、証明書などの詳
 - [VPN と Tailscale](vpn.md)
 - [ファイアウォール（ufw）](firewall.md)
 - [世界に公開する方法（ポート開放 と Cloudflare Tunnel）](publish-methods.md)
+- [Cloudflare Tunnel で公開した手順（hiromu-lab.dev）](cloudflare-tunnel-setup.md)

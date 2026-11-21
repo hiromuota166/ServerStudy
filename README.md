@@ -24,6 +24,9 @@ iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
                     └ Ubuntu Server 26.04.1 LTS（192.168.100.10）── nginx（80）
 
 iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
+
+世界中のブラウザ ─HTTPS─ Cloudflare ═ トンネル ═ cloudflared（Ubuntu）─ nginx（localhost:80）
+  https://test.hiromu-lab.dev
 ```
 
 ## 通信経路
@@ -36,7 +39,8 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 | Windows | Ubuntu `192.168.100.10` | 22 | ssh | NATSwitch |
 | Windows | Ubuntu `192.168.100.10` | 80 | HTTP | NATSwitch |
 | Tailscale の機器（iPhone など） | Ubuntu `100.114.194.19` | 22, 80 | ssh, HTTP | Tailscale |
-| インターネット | どこにも | - | - | 入口なし |
+| インターネット | `test.hiromu-lab.dev` | 443 | HTTPS | Cloudflare → トンネル → nginx の 80 番（→ [手順](security/cloudflare-tunnel-setup.md)） |
+| インターネット | 自宅のグローバル IP | どれも | - | 入口なし（ルーターも ufw も閉じたまま） |
 
 - 「HTTP」は、ブラウザでも `curl` でも iOS の `URLSession` でも同じ。扉から見ると区別はない
 - ✅ ufw でデフォルト拒否にして、この表の通り道だけを許可している（→ [ファイアウォール（ufw）](security/firewall.md)）
@@ -53,5 +57,5 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 - [x] Tailscale で、自分だけどこからでも入れるようにする
 - [x] ssh の強化とファイアウォール
 - [ ] 自作の Web アプリ（API）を作って、nginx の裏で動かす
-- [ ] ドメイン + Cloudflare Tunnel で HTTPS 公開する
+- [x] ドメイン + Cloudflare Tunnel で HTTPS 公開する（`https://test.hiromu-lab.dev`）
 - [ ] 運用保守（自動アップデート、ログ、バックアップ、デプロイ手順）
