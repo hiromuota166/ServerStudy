@@ -49,8 +49,8 @@ Cloudflare が守ってくれるのは **入口まで**。入口を通ってき�
 - 管理用の ssh は Cloudflare に出さず、Tailscale だけにしておく（公開用の道と管理用の道を分ける）
 
 ## 自分の環境では
-- 今は A も B もしていない。ルーターのポートは1つも開けていない
-- **B（Cloudflare Tunnel）** を使う予定。ルーターも Windows も設定を変えずに、Ubuntu に `cloudflared` を入れるだけで公開できる
+- A はしていない。ルーターのポートは1つも開けていない
+- **B（Cloudflare Tunnel）** で公開した（→ [手順](cloudflare-tunnel-setup.md)）。ルーターも Windows も設定を変えずに、Ubuntu に `cloudflared` を入れるだけで公開できる
 
 ## 関連する用語
 - [用語集](../glossary.md#公開セキュリティ)
