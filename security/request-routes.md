@@ -62,6 +62,10 @@ DNS ○ → WAF ✕ → 403
 （もし WAF をすり抜けても nginx で 404）
 ```
 
+- **最初は止まらなかった**：無料プランの WAF のままだと Cloudflare は素通しで、nginx が 404 を返していた
+- そこで Cloudflare の「セキュリティルール」→「カスタムルール」に `block-dotenv`（**URI パス** が `/.env` を **含む** → **ブロック**）を足した。今は Cloudflare の「Sorry, you have been blocked」画面で 403 になる
+- 見分け方：ヘッダーの `Server:` は Cloudflare を通ると nginx の返事でも `cloudflare` になる。**本文の一番下**に `nginx/...` があれば nginx、`Cloudflare Ray ID` があれば Cloudflare が返している
+
 ### 5. 攻撃者 → 自宅のグローバル IP の 22 番
 
 ```
