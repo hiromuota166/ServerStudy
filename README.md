@@ -26,7 +26,8 @@ iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
 iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 
 世界中のブラウザ ─HTTPS─ Cloudflare ═ トンネル ═ cloudflared（Ubuntu）─ nginx（localhost:80）
-  https://test.hiromu-lab.dev
+  https://test.hiromu-lab.dev                                              ├ test   → Hello のページ
+  https://status.hiromu-lab.dev/api/status                                 └ status → uvicorn（127.0.0.1:8000）健康診断 API
 ```
 
 ## 通信経路
@@ -40,6 +41,7 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 | Windows | Ubuntu `192.168.100.10` | 80 | HTTP | NATSwitch |
 | Tailscale の機器（iPhone など） | Ubuntu `100.114.194.19` | 22, 80 | ssh, HTTP | Tailscale |
 | インターネット | `test.hiromu-lab.dev` | 443 | HTTPS | Cloudflare → トンネル → nginx の 80 番（→ [手順](security/cloudflare-tunnel-setup.md)） |
+| インターネット | `status.hiromu-lab.dev` | 443 | HTTPS（API、合言葉が必要） | Cloudflare → トンネル → nginx の 80 番 → uvicorn `127.0.0.1:8000`（→ [健康診断 API](web/status-api.md)） |
 | インターネット | 自宅のグローバル IP | どれも | - | 入口なし（ルーターも ufw も閉じたまま） |
 
 - 「HTTP」は、ブラウザでも `curl` でも iOS の `URLSession` でも同じ。扉から見ると区別はない
@@ -56,6 +58,6 @@ iPhone（どこからでも）═ Tailscale ═ Ubuntu（100.114.194.19）
 - [x] 内部仮想スイッチを作って IP を固定する
 - [x] Tailscale で、自分だけどこからでも入れるようにする
 - [x] ssh の強化とファイアウォール
-- [ ] 自作の Web アプリ（API）を作って、nginx の裏で動かす
+- [x] 自作の Web アプリ（API）を作って、nginx の裏で動かす（健康診断 API）
 - [x] ドメイン + Cloudflare Tunnel で HTTPS 公開する（`https://test.hiromu-lab.dev`）
 - [ ] 運用保守（自動アップデート、ログ、バックアップ、デプロイ手順）

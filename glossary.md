@@ -24,7 +24,7 @@
 | LTS | Long Term Support（長期サポート版）。偶数年4月の「XX.04」。サーバーでは LTS を選ぶ |
 | ポイントリリース（.1 など） | リリース後の不具合修正をまとめた版。26.04.1 など |
 | カーネル | OS の中心部分。更新したら再起動が必要（`System restart required`） |
-| OOM（Out of memory） | メモリ不足。Linux はプログラムを強制終了させて耐える |
+| OOM（Out of memory） | メモリ不足。Linux はプログラムを強制終了させて耐える（OOM killer）。iOS の Jetsam に近い |
 
 ## Linux の操作
 
@@ -45,6 +45,17 @@
 | Debian 系 / Red Hat 系 | Linux の2大家系。Debian 系（Debian、Ubuntu）は `apt` と `.deb`、Red Hat 系（RHEL、Fedora、Rocky）は `dnf` と `.rpm`。Ubuntu には Debian 用のソフトがそのまま入る |
 | gpg 鍵（署名の鍵） | apt で入れるソフトが本物の配布元のものかを確かめるための鍵。HTTPS の証明書と似た考え方 |
 | x86_64 / arm64 | CPU の種類。`uname -m` で確認。今の Ubuntu は `x86_64`（64-bit） |
+| PID（プロセス ID） | 動いているプログラムに OS が付ける整理番号。起動するたびに変わる。PID 1 は `systemd` で、全部の親 → [詳しく](linux/system-monitoring.md) |
+| /proc | Linux が自分の状態をファイルとして見せる場所。読むたびに OS が中身を作る。`top` も psutil もここを読む |
+| CPU 使用率 | どれだけ忙しいか。`top` の `100 − id`。全コアの平均なので、100% で頭打ち |
+| ロードアベレージ | CPU を使いたい・待っているプログラムの数の平均（1分・5分・15分）。**コア数（今は3）と比べる**。超えたら行列 → [詳しく](linux/system-monitoring.md) |
+| buff/cache / available | buff/cache は空きメモリをファイルのキャッシュに借りている分（返せる）。メモリが足りているかは **available** を見る |
+| スケジューラー | カーネルの中の CPU の配り係。動きたいプログラムに数ミリ秒ずつ順番に使わせる |
+| enabled（systemd） | 起動時に自動で立ち上がる約束。`systemctl is-enabled サービス名` で確認 |
+| ソケット起動 | `ssh.socket` が22番で電話番だけして、接続が来たら `ssh.service` を起こす仕組み。だから ssh は `disabled` でも入れる |
+| SIGHUP | 「電話を切った（hang up）」という合図。ssh を切ると、そこから起動したプログラムに送られて止まる。だから常駐させるものは systemd に預ける |
+| 仮想環境（venv） | Python のプロジェクト専用のライブラリ置き場。SPM でプロジェクトごとに依存を持つのと同じ |
+| 環境変数 | プログラムの外から渡す設定値。合言葉はコードに書かず、これで渡す（systemd の `EnvironmentFile`） |
 
 ## ネットワーク
 
@@ -97,6 +108,7 @@
 | 公開鍵認証 | パスワードの代わりに鍵ファイルでログインする方法。より安全 → [詳しく](ssh/hardening.md) |
 | 秘密鍵 / 公開鍵 | 秘密鍵は自分の PC だけに置く。公開鍵はサーバーの `authorized_keys` に登録する |
 | パスフレーズ | 秘密鍵のファイルを開くための合言葉。サーバーには送られない |
+| ssh config | `~/.ssh/config` に接続先の名前を書いておくと、`ssh hiromuserver` だけで入れる。scp や VS Code でも使える → [詳しく](ssh/ssh-config.md) |
 
 ## Web
 
@@ -111,6 +123,14 @@
 | API | プログラム同士がデータをやり取りする窓口。Web API は JSON を返すことが多い |
 | JSON | データの書き方。iOS アプリが `URLSession` で受け取っているもの |
 | ドキュメントルート | Web サーバーが公開するファイルの置き場。nginx は `/var/www/html` |
+| FastAPI / uvicorn | FastAPI は Python で API を書くフレームワーク（Vapor のルーティングのようなもの）。uvicorn はそれを動かすサーバー → [健康診断 API](web/status-api.md) |
+| Host ヘッダー | リクエストの **宛名**（どのサイト宛てか）。nginx はこれで `server_name` が合う設定を選ぶ。差出人ではない |
+| default_server | どの `server_name` にも当てはまらないときに受け取る nginx の設定 |
+| sites-available / sites-enabled | nginx の設定の置き場と、オンにする設定へのリンクを置く場所 |
+| ステータスコード | 返事の結果の番号（200 成功、401 誰？、404 ない、502 奥がおかしい）。本文とは別にある。iOS の `HTTPURLResponse.statusCode` |
+| 401 Unauthorized | 「あなたは誰？」。合言葉がない・間違っている |
+| 400 Bad Request | 「何を言っているか分からない」。HTTP の窓口に HTTPS で話しかけたときなど |
+| IPv6（`::1`） | 新しい形式の住所。`localhost` は `127.0.0.1` と `::1` の両方を持つ。nginx は `listen [::]:80` がないと IPv6 で受け取れない |
 
 ## 公開・セキュリティ
 
@@ -124,7 +144,14 @@
 | Cloudflare Tunnel | ルーターのポートを開けずに、サーバーをインターネットに公開できる仕組み。Ubuntu から先に Cloudflare へつないでおく → [仕組み](security/publish-methods.md)、[実際の手順](security/cloudflare-tunnel-setup.md) |
 | cloudflared | Cloudflare Tunnel をつなぐための、Ubuntu 側のソフト。サービスとして常駐し、再起動しても自動でつなぎ直す |
 | トンネルのトークン | cloudflared が「自分は hiromuserver だ」と名乗るための鍵（`eyJ...`）。漏れると偽サイトをつながれるので、人に見せない |
-| ルート（公開ホスト名） | 「このドメインに来たら、Ubuntu の中のどこに渡すか」の設定。今は `test.hiromu-lab.dev` → `http://localhost:80` |
+| ルート（公開ホスト名） | 「このドメインに来たら、Ubuntu の中のどこに渡すか」の設定。今は `test.hiromu-lab.dev` と `status.hiromu-lab.dev` → `http://localhost:80`。足すと DNS レコードも自動で作られる |
+| API キー（合言葉） | 知っている人だけが API を使えるようにする文字列。**ヘッダーで送る**（URL に付けるとログや履歴に残る） → [詳しく](web/status-api.md) |
+| 多層防御 | 守りを何重にも重ねる考え方。ufw + 127.0.0.1 で待つ + nginx で絞る + 合言葉 |
+| 最小権限 | 必要な権限だけで動かす考え方。API は root ではなく hiromu で動かす |
+| アクセスログ | nginx が「誰が・いつ・何を見に来たか」を1行ずつ記録したもの。`/var/log/nginx/access.log` → [読み方](security/log-reading.md) |
+| ログローテーション | ログを毎日新しいファイルに切り替えて、古いものを `.1` や `.gz` に移すこと |
+| User-Agent | アクセスしてきた相手が名乗っている名前。`curl/8.x`、`facebookexternalhit`（リンクのプレビューを作るボット）など |
+| Certificate Transparency（CT ログ） | 発行された証明書の記録が載る、世界中に公開されたログ。攻撃ボットも見ていて、新しいドメインがすぐ見つかる理由 |
 | 502 Bad Gateway | 受付（Cloudflare や nginx）は動いているが、奥に渡したら返事がおかしかった、というエラー。奥の区間を疑う |
 | オリジン | 受付の奥にある、本当の返事を作るサーバー。今回は Ubuntu の nginx |
 | DDNS | 自宅のグローバル IP が変わっても、ドメイン名と自動で結びつけ直してくれる仕組み |
@@ -161,4 +188,19 @@
 | `uname -m` | CPU の種類（`x86_64` など）を確認する |
 | `nslookup ドメイン 1.1.1.1` | ドメインがどの IP になるか調べる（Windows） |
 | `curl.exe -sS -I https://ドメイン` | 返事のヘッダーだけ見る。`200 OK` / `502` などがわかる（Windows） |
+| `ssh hiromuserver` | ssh config に書いた名前で接続する（Windows） |
+| `nproc` | CPU のコア数を見る |
+| `uptime` / `cat /proc/loadavg` | 起動時間とロードアベレージを見る |
+| `df -h /` | ディスクの使用量を見る |
+| `top` | CPU を使っている順にプログラムを見る（`q` で終了） |
+| `cat /var/run/reboot-required` | 再起動が必要か確認する |
+| `systemctl is-enabled サービス名` | 起動時に自動で立ち上がるか確認する |
+| `sudo systemctl enable --now サービス名` | 自動起動にして、今すぐ起動する |
+| `sudo systemctl daemon-reload` | systemd の設定ファイルを読み直す |
+| `sudo nginx -t && sudo systemctl reload nginx` | nginx の設定を確かめてから、止めずに反映する |
+| `curl -si URL` | ステータスコードとヘッダーも表示する |
+| `curl -H "Host: 名前" localhost/` | 宛名を指定して送る |
+| `sudo zcat -f /var/log/nginx/access.log* \| awk '{print $7}' \| sort \| uniq -c \| sort -rn \| head -20` | どのページが何回見られたかを数える |
+| `stress-ng --cpu 3 --timeout 90s` | わざと CPU に負荷をかける |
+| `watch -n 2 'コマンド'` | 2秒ごとにコマンドを実行して表示し続ける |
 | `curl.exe ifconfig.me` | 外から見た自分のグローバル IP（ルーターの住所）を確認する（Windows） |
