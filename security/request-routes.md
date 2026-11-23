@@ -5,6 +5,13 @@
 自宅サーバーへ来るリクエストを「電車の路線」に見立てて、**どの駅（守り）で止まるか・どこまで通るか**を並べた図。
 守りは大きく2種類に分かれる。**番号（IP とポート）を見る守り**と、**中身（URL やヘッダー）を見る守り**。
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../diagrams/request-routes-dark.png">
+  <img src="../diagrams/request-routes.png" alt="リクエスト路線図：9本のリクエストが、Cloudflare DNS・WAF・自宅ルーター・Windows・ufw・cloudflared・nginx・合言葉のどの駅で止まり、どこまで通るかを色の線で示した図" width="100%">
+</picture>
+
+（元の HTML は [diagrams/request-routes.html](../diagrams/request-routes.html)）
+
 ## 駅（守り）の一覧
 
 上から順に、外 → 中。

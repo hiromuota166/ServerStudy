@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><title>リクエスト路線図</title>
+<style>
+:root { --bg:#FBFAF7; --fg:#1B2330; --muted:#5C6675; --band:#EFEDE7; --stopbg:#E5484D; }
+[data-theme="dark"] { --bg:#141A23; --fg:#E8EBF0; --muted:#9AA4B2; --band:#1D2531; --stopbg:#E5484D; }
+body { margin:0; background:var(--bg); }
+.canvas { width:1406px; background:var(--bg); padding:8px 0 0; font-family:"Yu Gothic UI","Meiryo","Noto Sans JP",sans-serif; }
+h1 { margin:16px 34px 0; font-size:26px; color:var(--fg); }
+p.lede { margin:6px 34px 0; font-size:15px; color:var(--muted); }
+svg text { fill:var(--fg); }
+.band { fill:var(--band); }
+.st { font-size:19px; font-weight:700; }
+.what { font-size:14px; fill:var(--muted) !important; }
+.num { font-size:20px; font-weight:700; text-anchor:middle; fill:#fff !important; }
+.hd { font-size:15px; font-weight:700; text-anchor:middle; }
+.hd2 { font-size:13px; text-anchor:middle; fill:var(--muted) !important; }
+.pass { fill:var(--bg); stroke-width:5; }
+.stop { fill:var(--stopbg); }
+.stopx { stroke:#fff; stroke-width:4; stroke-linecap:round; }
+.goalin { fill:var(--bg); }
+.res { font-size:15px; font-weight:700; }
+.leg { font-size:15px; }
+</style></head>
+<body><div class="canvas">
+<h1>リクエスト路線図：どこで止まって、どこまで通るか</h1>
+<p class="lede">上が外、下が中。各リクエストは自分の出発駅から下へ進む。</p>
+<svg viewBox="0 0 1406 962" width="1406" height="962" role="img" aria-label="9本のリクエストが、どの駅で止まるか・どこまで通るかを示した路線図">
+<rect x="16" y="150" width="1374" height="78" rx="10" class="band"/>
+<text x="34" y="185" class="st">Cloudflare DNS</text>
+<text x="34" y="209" class="what">名前を見る</text>
+<text x="34" y="263" class="st">Cloudflare WAF</text>
+<text x="34" y="287" class="what">中身を見る</text>
+<rect x="16" y="306" width="1374" height="78" rx="10" class="band"/>
+<text x="34" y="341" class="st">自宅ルーター</text>
+<text x="34" y="365" class="what">番号を見る</text>
+<text x="34" y="419" class="st">Windows</text>
+<text x="34" y="443" class="what">番号を見る</text>
+<rect x="16" y="462" width="1374" height="78" rx="10" class="band"/>
+<text x="34" y="497" class="st">ufw</text>
+<text x="34" y="521" class="what">番号を見る</text>
+<text x="34" y="575" class="st">cloudflared</text>
+<text x="34" y="599" class="what">nginx に渡すだけ</text>
+<rect x="16" y="618" width="1374" height="78" rx="10" class="band"/>
+<text x="34" y="653" class="st">nginx</text>
+<text x="34" y="677" class="what">中身を見る</text>
+<text x="34" y="731" class="st">合言葉 / 鍵</text>
+<text x="34" y="755" class="what">中身を見る</text>
+<rect x="16" y="774" width="1374" height="78" rx="10" class="band"/>
+<text x="34" y="809" class="st">到着</text>
+<circle cx="298" cy="44" r="20" fill="#2F6FB3"/>
+<text x="298" y="51" class="num">1</text>
+<text x="298" y="94" class="hd">合言葉あり</text>
+<text x="298" y="116" class="hd2">/api/status</text>
+<line x1="298" y1="189" x2="298" y2="267" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round"/>
+<line x1="298" y1="267" x2="298" y2="345" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="298" y1="345" x2="298" y2="423" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="298" y1="423" x2="298" y2="501" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="298" y1="501" x2="298" y2="579" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="298" y1="579" x2="298" y2="657" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round"/>
+<line x1="298" y1="657" x2="298" y2="735" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round"/>
+<line x1="298" y1="735" x2="298" y2="813" stroke="#2F6FB3" stroke-width="8" stroke-linecap="round"/>
+<circle cx="298" cy="189" r="11" class="pass" stroke="#2F6FB3"/>
+<circle cx="298" cy="267" r="11" class="pass" stroke="#2F6FB3"/>
+<circle cx="298" cy="345" r="5" fill="#2F6FB3" opacity="0.55"/>
+<circle cx="298" cy="423" r="5" fill="#2F6FB3" opacity="0.55"/>
+<circle cx="298" cy="501" r="5" fill="#2F6FB3" opacity="0.55"/>
+<circle cx="298" cy="579" r="11" class="pass" stroke="#2F6FB3"/>
+<circle cx="298" cy="657" r="11" class="pass" stroke="#2F6FB3"/>
+<circle cx="298" cy="735" r="11" class="pass" stroke="#2F6FB3"/>
+<circle cx="298" cy="813" r="16" fill="#2F6FB3"/>
+<circle cx="298" cy="813" r="7" class="goalin"/>
+<text x="322" y="819" class="res">200</text>
+<circle cx="422" cy="44" r="20" fill="#7A5AC8"/>
+<text x="422" y="51" class="num">2</text>
+<text x="422" y="94" class="hd">合言葉なし</text>
+<text x="422" y="116" class="hd2">/api/status</text>
+<line x1="422" y1="189" x2="422" y2="267" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round"/>
+<line x1="422" y1="267" x2="422" y2="345" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="422" y1="345" x2="422" y2="423" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="422" y1="423" x2="422" y2="501" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="422" y1="501" x2="422" y2="579" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="422" y1="579" x2="422" y2="657" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round"/>
+<line x1="422" y1="657" x2="422" y2="735" stroke="#7A5AC8" stroke-width="8" stroke-linecap="round"/>
+<circle cx="422" cy="189" r="11" class="pass" stroke="#7A5AC8"/>
+<circle cx="422" cy="267" r="11" class="pass" stroke="#7A5AC8"/>
+<circle cx="422" cy="345" r="5" fill="#7A5AC8" opacity="0.55"/>
+<circle cx="422" cy="423" r="5" fill="#7A5AC8" opacity="0.55"/>
+<circle cx="422" cy="501" r="5" fill="#7A5AC8" opacity="0.55"/>
+<circle cx="422" cy="579" r="11" class="pass" stroke="#7A5AC8"/>
+<circle cx="422" cy="657" r="11" class="pass" stroke="#7A5AC8"/>
+<rect x="406" y="719" width="32" height="32" rx="6" class="stop"/>
+<path d="M414 727 L430 743 M430 727 L414 743" class="stopx"/>
+<text x="446" y="741" class="res">401</text>
+<circle cx="546" cy="44" r="20" fill="#1F9E89"/>
+<text x="546" y="51" class="num">3</text>
+<text x="546" y="94" class="hd">/docs</text>
+<line x1="546" y1="189" x2="546" y2="267" stroke="#1F9E89" stroke-width="8" stroke-linecap="round"/>
+<line x1="546" y1="267" x2="546" y2="345" stroke="#1F9E89" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="546" y1="345" x2="546" y2="423" stroke="#1F9E89" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="546" y1="423" x2="546" y2="501" stroke="#1F9E89" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="546" y1="501" x2="546" y2="579" stroke="#1F9E89" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="546" y1="579" x2="546" y2="657" stroke="#1F9E89" stroke-width="8" stroke-linecap="round"/>
+<circle cx="546" cy="189" r="11" class="pass" stroke="#1F9E89"/>
+<circle cx="546" cy="267" r="11" class="pass" stroke="#1F9E89"/>
+<circle cx="546" cy="345" r="5" fill="#1F9E89" opacity="0.55"/>
+<circle cx="546" cy="423" r="5" fill="#1F9E89" opacity="0.55"/>
+<circle cx="546" cy="501" r="5" fill="#1F9E89" opacity="0.55"/>
+<circle cx="546" cy="579" r="11" class="pass" stroke="#1F9E89"/>
+<rect x="530" y="641" width="32" height="32" rx="6" class="stop"/>
+<path d="M538 649 L554 665 M554 649 L538 665" class="stopx"/>
+<text x="570" y="663" class="res">404</text>
+<circle cx="670" cy="44" r="20" fill="#C2410C"/>
+<text x="670" y="51" class="num">4</text>
+<text x="670" y="94" class="hd">/.env</text>
+<text x="670" y="116" class="hd2">攻撃</text>
+<line x1="670" y1="189" x2="670" y2="267" stroke="#C2410C" stroke-width="8" stroke-linecap="round"/>
+<circle cx="670" cy="189" r="11" class="pass" stroke="#C2410C"/>
+<rect x="654" y="251" width="32" height="32" rx="6" class="stop"/>
+<path d="M662 259 L678 275 M678 259 L662 275" class="stopx"/>
+<text x="694" y="273" class="res">403</text>
+<circle cx="794" cy="44" r="20" fill="#B91C5C"/>
+<text x="794" y="51" class="num">5</text>
+<text x="794" y="94" class="hd">攻撃者</text>
+<text x="794" y="116" class="hd2">自宅IP:22</text>
+<rect x="778" y="329" width="32" height="32" rx="6" class="stop"/>
+<path d="M786 337 L802 353 M802 337 L786 353" class="stopx"/>
+<text x="818" y="351" class="res">無言</text>
+<circle cx="918" cy="44" r="20" fill="#0E7490"/>
+<text x="918" y="51" class="num">6</text>
+<text x="918" y="94" class="hd">家の Wi-Fi</text>
+<text x="918" y="116" class="hd2">Win:8080</text>
+<line x1="918" y1="423" x2="918" y2="501" stroke="#0E7490" stroke-width="8" stroke-linecap="round"/>
+<line x1="918" y1="501" x2="918" y2="657" stroke="#0E7490" stroke-width="8" stroke-linecap="round"/>
+<line x1="918" y1="657" x2="918" y2="813" stroke="#0E7490" stroke-width="8" stroke-linecap="round"/>
+<circle cx="918" cy="423" r="11" class="pass" stroke="#0E7490"/>
+<circle cx="918" cy="501" r="11" class="pass" stroke="#0E7490"/>
+<circle cx="918" cy="657" r="11" class="pass" stroke="#0E7490"/>
+<circle cx="918" cy="813" r="16" fill="#0E7490"/>
+<circle cx="918" cy="813" r="7" class="goalin"/>
+<text x="942" y="819" class="res">Hello</text>
+<circle cx="1042" cy="44" r="20" fill="#4D7C0F"/>
+<text x="1042" y="51" class="num">7</text>
+<text x="1042" y="94" class="hd">Tailscale</text>
+<text x="1042" y="116" class="hd2">ssh</text>
+<line x1="1042" y1="345" x2="1042" y2="423" stroke="#4D7C0F" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="1042" y1="423" x2="1042" y2="501" stroke="#4D7C0F" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="1042" y1="501" x2="1042" y2="735" stroke="#4D7C0F" stroke-width="8" stroke-linecap="round"/>
+<line x1="1042" y1="735" x2="1042" y2="813" stroke="#4D7C0F" stroke-width="8" stroke-linecap="round"/>
+<circle cx="1042" cy="345" r="5" fill="#4D7C0F" opacity="0.55"/>
+<circle cx="1042" cy="423" r="5" fill="#4D7C0F" opacity="0.55"/>
+<circle cx="1042" cy="501" r="11" class="pass" stroke="#4D7C0F"/>
+<circle cx="1042" cy="735" r="11" class="pass" stroke="#4D7C0F"/>
+<circle cx="1042" cy="813" r="16" fill="#4D7C0F"/>
+<circle cx="1042" cy="813" r="7" class="goalin"/>
+<text x="1066" y="819" class="res">ログイン</text>
+<circle cx="1166" cy="44" r="20" fill="#A16207"/>
+<text x="1166" y="51" class="num">8</text>
+<text x="1166" y="94" class="hd">Windows</text>
+<text x="1166" y="116" class="hd2">Ubuntu:8000</text>
+<rect x="1150" y="485" width="32" height="32" rx="6" class="stop"/>
+<path d="M1158 493 L1174 509 M1174 493 L1158 509" class="stopx"/>
+<text x="1190" y="507" class="res">無言</text>
+<circle cx="1290" cy="44" r="20" fill="#475569"/>
+<text x="1290" y="51" class="num">9</text>
+<text x="1290" y="94" class="hd">Tailscale</text>
+<text x="1290" y="116" class="hd2">Ubuntu:80</text>
+<line x1="1290" y1="345" x2="1290" y2="423" stroke="#475569" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="1290" y1="423" x2="1290" y2="501" stroke="#475569" stroke-width="8" stroke-linecap="round" stroke-dasharray="3 9"/>
+<line x1="1290" y1="501" x2="1290" y2="657" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+<line x1="1290" y1="657" x2="1290" y2="813" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+<circle cx="1290" cy="345" r="5" fill="#475569" opacity="0.55"/>
+<circle cx="1290" cy="423" r="5" fill="#475569" opacity="0.55"/>
+<circle cx="1290" cy="501" r="11" class="pass" stroke="#475569"/>
+<circle cx="1290" cy="657" r="11" class="pass" stroke="#475569"/>
+<circle cx="1290" cy="813" r="16" fill="#475569"/>
+<circle cx="1290" cy="813" r="7" class="goalin"/>
+<text x="1314" y="819" class="res">Hello</text>
+<circle cx="48" cy="902" r="9" class="pass" stroke="var(--fg)"/>
+<text x="76" y="908" class="leg">通過</text>
+<line x1="160" y1="902" x2="190" y2="902" stroke="var(--fg)" stroke-width="6" stroke-dasharray="3 7" stroke-linecap="round"/>
+<text x="202" y="908" class="leg">トンネルの中（素通し）</text>
+<rect x="440" y="889" width="26" height="26" rx="5" class="stop"/>
+<text x="481" y="908" class="leg">止まる（横は返るもの）</text>
+<circle cx="732" cy="902" r="13" fill="var(--fg)"/><circle cx="732" cy="902" r="5" class="goalin"/>
+<text x="760" y="908" class="leg">到着</text>
+<text x="1382" y="908" class="leg" text-anchor="end">印のない駅は通らない</text>
+</svg>
+</div></body></html>
