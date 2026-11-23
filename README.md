@@ -17,6 +17,13 @@
 
 ## 今の構成
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="diagrams/architecture-dark.png">
+  <img src="diagrams/architecture.png" alt="自宅サーバーの構成図：訪問者は HTTPS で Cloudflare に届き、トンネルで Ubuntu の cloudflared、nginx、FastAPI へ流れる。管理は自分の端末から Tailscale 経由の ssh だけ" width="100%">
+</picture>
+
+（[stack-diagram](https://github.com/caru-ini/stack-diagram) で作成。元の HTML は [diagrams/architecture.html](diagrams/architecture.html)）
+
 ```
 iPhone ─ Wi-Fi ─ Windows（192.168.11.10:8080）
                     │ ポートフォワーディング
