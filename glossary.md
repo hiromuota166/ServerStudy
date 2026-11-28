@@ -87,7 +87,14 @@
 | 仮想スイッチ | Hyper-V の中の仮想的なネットワーク機器 |
 | Default Switch | Hyper-V に最初からある仮想スイッチ。Windows を再起動すると IP が変わりやすい |
 | 内部仮想スイッチ（NATSwitch） | 自分で作った仮想スイッチ。番号を固定できる |
-| ポート | 1つの IP の中の「窓口番号」。ssh は22番、HTTP は80番、HTTPS は443番 |
+| ポート | 1つの IP の中の「窓口番号」。IP が住所なら、ポートは部屋番号。ssh は22番、HTTP は80番、HTTPS は443番。PID（誰が）とは別で、プログラムが部屋を借りる関係 → [詳しく](network/tcp-handshake.md) |
+| エフェメラルポート | 送る側が使う、OS がその場で選ぶ一時的な部屋番号（`62628` など）。返事はここに届く。curl のたびに変わる |
+| TCP | データを送る前に電話のような確認をしてから話す通信の決まり。届いたかを確かめて、届かなければ送り直す。HTTP や ssh はこの上で動く → [詳しく](network/tcp-handshake.md) |
+| 3ウェイハンドシェイク | TCP の始まりの確認。SYN（もしもし）→ SYN+ACK（聞こえる、そっちは？）→ ACK（聞こえる）。HTTP の本文はこの後に流れる → [詳しく](network/tcp-handshake.md) |
+| SYN / ACK / FIN | TCP の矢印の種類。SYN＝話せる？、ACK＝受け取った、FIN＝切るね。tcpdump では `[S]` `[.]` `[F.]` |
+| RST | 「その番号は使われていません」。誰も待っていない部屋に SYN が来ると、**カーネル**がすぐ返す。curl は 0ms で `Could not connect` |
+| DROP と REJECT | 閉じた部屋への扱いの2種類。DROP は黙って捨てる（相手はタイムアウト）、REJECT は断る（すぐ失敗）。ufw の deny やうちのルーターは DROP |
+| 再送タイムアウト | 返事がないとき、TCP があきらめずに送り直す仕組み。間隔は 1秒 → 2秒 → 4秒…と倍になる |
 | ポートフォワーディング（ポート開放） | ある窓口に来た通信を、別の機器の窓口に転送すること。NAT のメモ帳に手で書いておく設定。今回は Windows の8080番 → Ubuntu の80番 → [公開の方法](security/publish-methods.md) |
 | ファイアウォール | 通信を許可・拒否する門番 |
 | ネットワークプロファイル | Windows の Wi-Fi の種類。パブリック（厳しい）/ プライベート（自宅向け） |
@@ -184,6 +191,7 @@
 | `tailscale ip -4` | Tailscale 用の IP（`100.x.x.x`）を確認する |
 | `sudo ufw status verbose` | ファイアウォールの設定を確認する |
 | `sudo ss -tlnp` | 待ち受けているポートを確認する |
+| `sudo tcpdump -i eth0 -n 'tcp port 80'` | eth0 を流れる 80 番のパケットを1つずつ表示する。`Ctrl+C` で止める。`-i lo` で自分自身の通信 |
 | `sudo sshd -t` | ssh の設定ファイルに書き間違いがないか確認する |
 | `systemctl status cloudflared` | トンネルがつながっているか確認する（`active (running)` なら OK） |
 | `sudo journalctl -u cloudflared -n 20 --no-pager` | cloudflared のログを最新20行見る |

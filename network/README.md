@@ -9,3 +9,4 @@ IP アドレス、DHCP、NAT、仮想スイッチ、ポートフォワーディ�
 - [DNS](dns.md)
 - [NAT](nat.md)
 - [グローバル IP とプライベート IP](global-ip.md)
+- [TCP の電話（ポート番号と 3ウェイハンドシェイク）](tcp-handshake.md)
